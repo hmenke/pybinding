@@ -45,7 +45,7 @@ class AliasArray(np.ndarray):
         if other in self.mapping:
             return super().__eq__(self.mapping[other])
         else:
-            result = np.zeros(len(self), dtype=np.bool)
+            result = np.zeros(len(self), dtype=bool)
             for k, v in self.mapping.items():
                 if k == other:
                     result = np.logical_or(result, super().__eq__(v))

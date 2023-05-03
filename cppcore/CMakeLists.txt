@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
 project(pybinding_cppcore CXX)
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
@@ -8,7 +10,6 @@ option(PB_TESTS "Enable testing" ON)
 option(PB_NATIVE_SIMD "Enable all instruction sets supported by the local machine" ON)
 option(PB_MKL "Use Intel's Math Kernel Library" OFF)
 option(PB_CUDA "Enable compilation of components written in CUDA" OFF)
-set(PB_CPP_STANDARD "-std=c++11" CACHE STRING "Required C++ standard flag")
 
 add_library(cppcore
     include/compute/eigen3/lanczos.hpp
@@ -102,9 +103,6 @@ add_library(cppcore
 add_library(pybinding::cppcore ALIAS cppcore)
 
 target_include_directories(cppcore PUBLIC include)
-if(NOT WIN32)
-    target_compile_options(cppcore PUBLIC ${PB_CPP_STANDARD})
-endif()
 
 find_package(Threads REQUIRED)
 target_link_libraries(cppcore PUBLIC Threads::Threads)
@@ -145,7 +143,7 @@ if(PB_CUDA)
 endif()
 
 if(PB_TESTS)
-    set(catch_url https://raw.githubusercontent.com/philsquared/Catch/v\${VERSION}/single_include)
-    download_dependency(catch 1.8.1 ${catch_url} catch.hpp)
+    set(catch_url https://github.com/catchorg/Catch2/raw/v\${VERSION}/single_include/catch2)
+    download_dependency(catch 2.13.10 ${catch_url} catch.hpp)
     add_subdirectory(tests)
 endif()
